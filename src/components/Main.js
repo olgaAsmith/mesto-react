@@ -1,6 +1,6 @@
 import React from "react";
 import { api } from "../utils/Api";
-import Cards from "./Cards";
+import Card from "./Card";
 
 function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
   const [userName, SetUserName] = React.useState("");
@@ -56,7 +56,7 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
       <section className="gallery">
         <ul className="list gallery__items">
           {cards.map(({ _id, ...props }) => (
-            <Cards key={_id} {...props} onCardClick={onCardClick} />
+            <Card key={_id} {...props} onCardClick={onCardClick} />
           ))}
         </ul>
       </section>

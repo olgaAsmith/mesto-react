@@ -3,7 +3,7 @@ import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
 import PopupWithForm from "./Popups/PopupWithForm";
-import PopupImage from "./Popups/PopupImage";
+import ImagePopup from "./Popups/ImagePopup";
 function App() {
   //*states
   const [isEditProfilePopupOpen, SetIsEditProfilePopupOpen] =
@@ -161,7 +161,7 @@ function App() {
             className="popup__error"
           ></span>
         </PopupWithForm>
-        <PopupImage card={selectedCard} onClose={closeAllPopup} />
+        <ImagePopup card={selectedCard} onClose={closeAllPopup} />
       </div>
     </div>
   );

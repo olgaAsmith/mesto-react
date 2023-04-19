@@ -1,6 +1,6 @@
 import React from "react";
 
-function PopupImage(props) {
+function ImagePopup(props) {
   return (
     <div className={`popup popup_gallery-image
     ${props.card.isOpen ? "popup_opened" : ''}`}>
@@ -13,4 +13,4 @@ function PopupImage(props) {
   );
 }
 
-export default PopupImage;
+export default ImagePopup;
