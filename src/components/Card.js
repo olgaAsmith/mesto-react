@@ -2,8 +2,8 @@ import React from "react";
 
 function Card(props) {
 
-  function handleClick(event) {
-    props.onCardClick(event.target);
+  function handleClick() {
+    props.onCardClick(props);
   }
 
   return (

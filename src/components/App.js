@@ -11,7 +11,7 @@ function App() {
   const [isAddPlacePopupOpen, SetIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, SetIsEditAvatarPopupOpen] =
     React.useState(false);
-  const [selectedCard, SetSelectedCard] = React.useState("");
+  const [selectedCard, SetSelectedCard] = React.useState({});
   //*set fsalse open
   const closeAllPopup = () => {
     SetIsEditProfilePopupOpen(false);
@@ -30,7 +30,7 @@ function App() {
     SetIsEditAvatarPopupOpen(true);
   };
   const handleCardClick = (card) => {
-    SetSelectedCard({ cardLink: card.src, cardName: card.alt, isOpen: true });
+    SetSelectedCard({ cardLink: card.link, cardName: card.name, isOpen: true });
   };
 
   return (
@@ -58,7 +58,6 @@ function App() {
           title="Редактировать профиль"
           formClassName="popup__form_profile"
           formName="profile"
-          buttonText="Сохранить"
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopup}
         >
@@ -143,7 +142,6 @@ function App() {
           title="Обновить аватар"
           formClassName="popup__form_avatar"
           formName="addAvatar"
-          buttonText="Сохранить"
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopup}
         >

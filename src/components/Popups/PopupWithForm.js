@@ -22,7 +22,7 @@ function PopupWithForm(props) {
               className={`popup__save button popup__button ${props.buttonClassName}`}
               type="submit"
             >
-              {props.buttonText}
+              {props.buttonText || 'Сохранить'}
             </button>
           </form>
           <button
