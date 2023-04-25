@@ -10,15 +10,15 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
 
   React.useEffect(() => {
     Promise.all([api.getCardsData(), api.getUserData()])
-    .then(([dataCards, dataUser]) => {
-      SetUserName(dataUser.name);
-      SetUserDescription(dataUser.about);
-      SetUserAvatar(dataUser.avatar);
-      SetCards([...dataCards]);
-    })
-    .catch((error) => {
-      console.log(error);
-    })
+      .then(([dataCards, dataUser]) => {
+        SetUserName(dataUser.name);
+        SetUserDescription(dataUser.about);
+        SetUserAvatar(dataUser.avatar);
+        SetCards([...dataCards]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   return (
