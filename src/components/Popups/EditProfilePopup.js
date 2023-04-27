@@ -48,7 +48,7 @@ function EditProfilePopup(props) {
         placeholder="Ваше имя"
         minLength="2"
         maxLength="40"
-        value={name}
+        value={name || ''}
         onChange={handleInputChangeName}
       />
       <span id="popup-input-tag-name-error" className="popup__error"></span>
@@ -61,7 +61,7 @@ function EditProfilePopup(props) {
         placeholder="Ваш род деятельности"
         minLength="2"
         maxLength="200"
-        value={description}
+        value={description || ''}
         onChange={handleInputChangeAbout}
       />
       <span id="popup-input-tag-prof-error" className="popup__error"></span>
