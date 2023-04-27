@@ -31,7 +31,7 @@ _Проект Mesto - социальная есть, где каждый мож�
 ------
 ------
 
-# App writing with Create React App
+# App writing with React
 
 Old project is rewritting by using React.
 
@@ -39,5 +39,15 @@ Adding components and add functions that simplified old app.
 
 Rewrited HTML to JSX and added simple functionality open/close modal windows and getting data from api.
 
+**Using React features: hooks, api, context and refs, app can:**
+
+- create new cards;
+- update user information;
+- change user avatar;
+- like/unlike/delete cards from gallery.
+
 ---------------------------------------
-In future it will be more functionality.
+
+**In future it will be more functionality.**
+
+---------------------------------------

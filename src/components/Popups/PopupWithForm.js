@@ -5,7 +5,7 @@ function PopupWithForm(props) {
     <>
       <div
         className={`popup ${props.popupName}
-      ${props.isOpen ? "popup_opened" : ''}`}
+      ${props.isOpen ? "popup_opened" : ""}`}
       >
         <div className={`popup__container ${props.containerName}`}>
           <h3 className={`popup__title ${props.titleClassName}`}>
@@ -16,13 +16,14 @@ function PopupWithForm(props) {
             className={`popup__form ${props.formClassName}`}
             name={props.formName}
             noValidate
+            onSubmit={props.onSubmit}
           >
             {props.children} {/* // & diff inputs} */}
             <button
               className={`popup__save button popup__button ${props.buttonClassName}`}
               type="submit"
             >
-              {props.buttonText || 'Сохранить'}
+              {props.buttonText || "Сохранить"}
             </button>
           </form>
           <button
