@@ -4,8 +4,8 @@ import Main from "./Main";
 import Footer from "./Footer";
 import PopupWithForm from "./Popups/PopupWithForm";
 import ImagePopup from "./Popups/ImagePopup";
-import { api } from "./utils/Api";
-import { CurrentUserContext } from "./context/CurrentUserContext";
+import { api } from "../utils/Api";
+import { CurrentUserContext } from "../context/CurrentUserContext";
 import EditProfilePopup from "./Popups/EditProfilePopup";
 import EditAvatarPopup from "./Popups/EditAvatarPopup";
 import AddPlacePopup from "./Popups/AddPlacePopup";
@@ -18,9 +18,10 @@ function App() {
   const [isEditAvatarPopupOpen, SetIsEditAvatarPopupOpen] =
     React.useState(false);
   const [selectedCard, SetSelectedCard] = React.useState({});
+  const [cards, setCards] = React.useState([]);
+  const [currentUser, setCurrentUser] = React.useState({});
 
-  //*user data
-  const [currentUser, setCurrentUser] = React.useState("");
+  //*get user data
   React.useEffect(() => {
     api
       .getUserData()
@@ -32,14 +33,14 @@ function App() {
       });
   }, []);
 
-  //*set fsalse open
+  //*set fsalse open pops
   const closeAllPopup = () => {
     SetIsEditProfilePopupOpen(false);
     SetIsAddPlacePopupOpen(false);
     SetIsEditAvatarPopupOpen(false);
     SetSelectedCard({});
   };
-  //*set true open
+  //*set true open pops
   const handleEditProfileClick = () => {
     SetIsEditProfilePopupOpen(true);
   };
@@ -53,11 +54,11 @@ function App() {
     SetSelectedCard({ cardLink: card.link, cardName: card.name, isOpen: true });
   };
 
-  const [cards, setCards] = React.useState([]);
-
+  //*get list card
   React.useEffect(() => {
-    Promise.all([api.getCardsData(), api.getUserData()])
-      .then(([dataCards, dataUser]) => {
+    api
+      .getCardsData()
+      .then((dataCards) => {
         setCards([...dataCards]);
       })
       .catch((error) => {
@@ -65,6 +66,7 @@ function App() {
       });
   }, []);
 
+  //*like card
   const handleCardLike = (card) => {
     const isLiked = card.likes.some((owner) => owner._id === currentUser._id);
     api
@@ -79,6 +81,7 @@ function App() {
       });
   };
 
+  //*delete card
   const handleCardDelete = (card) => {
     api
       .removeCard(card._id)
@@ -90,6 +93,20 @@ function App() {
       });
   };
 
+  //*add new card
+  const handleNewPlace = (cardName, cardLink) => {
+    api
+      .createCard(cardName, cardLink)
+      .then((newCard) => {
+        setCards([newCard, ...cards]);
+        closeAllPopup();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  //*change username
   const handleUpdateUser = (user) => {
     api
       .editUserInfo(user.name, user.about)
@@ -102,23 +119,12 @@ function App() {
       });
   };
 
+  //*change avatar
   const handleUpdateAvatar = (avatar) => {
     api
       .setAvatar(avatar)
       .then(() => {
         setCurrentUser({ ...currentUser, avatar: avatar });
-        closeAllPopup();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const handleNewPlace = (cardName, cardLink) => {
-    api
-      .createCard(cardName, cardLink)
-      .then((newCard) => {
-        setCards([newCard, ...cards]);
         closeAllPopup();
       })
       .catch((error) => {
