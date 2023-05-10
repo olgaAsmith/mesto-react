@@ -41,7 +41,7 @@ function EditProfilePopup(props) {
     >
       <input
         id="popup-input-tag-name"
-        className="popup__input popup__input_tag_name"
+        className="input popup__input popup__input_tag_name"
         type="text"
         name="accountName"
         required
@@ -54,7 +54,7 @@ function EditProfilePopup(props) {
       <span id="popup-input-tag-name-error" className="popup__error"></span>
       <input
         id="popup-input-tag-prof"
-        className="popup__input popup__input_tag_prof "
+        className="input popup__input popup__input_tag_prof "
         type="text"
         name="accountProf"
         required

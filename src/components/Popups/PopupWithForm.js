@@ -8,7 +8,7 @@ function PopupWithForm(props) {
       ${props.isOpen ? "popup_opened" : ""}`}
       >
         <div className={`popup__container ${props.containerName}`}>
-          <h3 className={`popup__title ${props.titleClassName}`}>
+          <h3 className={`title popup__title ${props.titleClassName}`}>
             {props.title}
           </h3>
           <form

@@ -30,7 +30,7 @@ function EditAvatarPopup(props) {
     >
       <input
         id="popup-input-avatar-link"
-        className="popup__input popup__input_avatar_link"
+        className="input popup__input popup__input_avatar_link"
         type="url"
         defaultValue=""
         name="avatarLink"

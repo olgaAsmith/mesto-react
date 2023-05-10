@@ -31,7 +31,7 @@ function AddPlacePopup(props) {
     >
       <input
         id="popup-input-image-name"
-        className="popup__input popup__input_image_name"
+        className="input popup__input popup__input_image_name"
         type="text"
         defaultValue=""
         name="placeName"
@@ -44,7 +44,7 @@ function AddPlacePopup(props) {
       <span id="popup-input-image-name-error" className="popup__error"></span>
       <input
         id="popup-input-image-link"
-        className="popup__input popup__input_image_link"
+        className="input popup__input popup__input_image_link"
         type="url"
         defaultValue=""
         name="placeLink"

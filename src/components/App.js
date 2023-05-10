@@ -9,6 +9,9 @@ import { CurrentUserContext } from "../context/CurrentUserContext";
 import EditProfilePopup from "./Popups/EditProfilePopup";
 import EditAvatarPopup from "./Popups/EditAvatarPopup";
 import AddPlacePopup from "./Popups/AddPlacePopup";
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import SignIn from "./sign/SignIn";
+import SignUp from "./sign/SignUp";
 
 function App() {
   //*pops
@@ -133,31 +136,37 @@ function App() {
   };
 
   return (
+    <BrowserRouter>
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
         <div className="page">
           <Header />
-          <Main
-            cards={cards}
-            onEditAvatar={() => {
-              handleEditAvatarClick();
-            }}
-            onEditProfile={() => {
-              handleEditProfileClick();
-            }}
-            onAddPlace={() => {
-              handleAddPlaceClick();
-            }}
-            onCardClick={(card) => {
-              handleCardClick(card);
-            }}
-            onCardLike={(card) => {
-              handleCardLike(card);
-            }}
-            onCardDelete={(card) => {
-              handleCardDelete(card);
-            }}
-          />
+          <Routes>
+            <Route path='/mesto-react' element={<Main
+              cards={cards}
+              onEditAvatar={() => {
+                handleEditAvatarClick();
+              }}
+              onEditProfile={() => {
+                handleEditProfileClick();
+              }}
+              onAddPlace={() => {
+                handleAddPlaceClick();
+              }}
+              onCardClick={(card) => {
+                handleCardClick(card);
+              }}
+              onCardLike={(card) => {
+                handleCardLike(card);
+              }}
+              onCardDelete={(card) => {
+                handleCardDelete(card);
+              }}
+            />} />
+            <Route path='/sign-up' element={<SignUp
+            />} />
+            <Route path='/sign-in' element={<SignIn  />} />
+          </Routes>
           <Footer />
           //*POPUPS //& edit profile
           <EditProfilePopup
@@ -190,6 +199,7 @@ function App() {
         </div>
       </div>
     </CurrentUserContext.Provider>
+    </BrowserRouter>
   );
 }
 
