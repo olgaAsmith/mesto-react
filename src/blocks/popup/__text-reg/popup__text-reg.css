@@ -1,11 +1,12 @@
-.sign-in__title {
-  color: #FFF;
+.popup__text-reg {
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 29px;
   text-align: center;
-  margin: 60px auto 50px;
 }
 
 @media screen and (max-width: 620px) {
-  .sign-in__title {
+  .popup__text-reg {
     font-size: 20px;
     line-height: 24px;
   }
