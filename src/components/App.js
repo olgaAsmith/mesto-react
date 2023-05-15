@@ -9,10 +9,12 @@ import { CurrentUserContext } from "../context/CurrentUserContext";
 import EditProfilePopup from "./Popups/EditProfilePopup";
 import EditAvatarPopup from "./Popups/EditAvatarPopup";
 import AddPlacePopup from "./Popups/AddPlacePopup";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import SignIn from "./sign/SignIn";
-import SignUp from "./sign/SignUp";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import Login from "./sign/Login";
+import Register from "./sign/Register";
 import InfoTooltip from "./Popups/InfoTooltip";
+import ProtectedRoute from "./ProtectedRoute";
+import { checkToken } from "../utils/Auth";
 
 function App() {
   //*pops
@@ -21,10 +23,18 @@ function App() {
   const [isAddPlacePopupOpen, SetIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, SetIsEditAvatarPopupOpen] =
     React.useState(false);
+  const [isInfoTooltipOpen, SetIsInfoTooltipOpen] = React.useState(false);
+  //*cards - user
   const [selectedCard, SetSelectedCard] = React.useState({});
   const [cards, setCards] = React.useState([]);
   const [currentUser, setCurrentUser] = React.useState({});
-  const [isInfoTooltipOpen, SetIsInfoTooltipOpen] = React.useState(true);
+  //*login
+  const [isLogIn, SetIsLogIn] = React.useState(false);
+  const [userEmail, SetUserEmail] = React.useState("");
+  //*navigate
+  const navigate = useNavigate();
+
+  const [isSuccessReg, SetIsSuccessReg] = React.useState(false);
 
   //*get user data
   React.useEffect(() => {
@@ -59,8 +69,9 @@ function App() {
   const handleCardClick = (card) => {
     SetSelectedCard({ cardLink: card.link, cardName: card.name, isOpen: true });
   };
-  const handleInfoTooltipClick = () => {
+  const handleInfoTooltipClick = (isSuccessReg) => {
     SetIsInfoTooltipOpen(true);
+    SetIsSuccessReg(isSuccessReg);
   };
 
   //*get list card
@@ -141,79 +152,124 @@ function App() {
       });
   };
 
+  //*LOGGED ingo
+  const handleLogin = () => {
+    SetIsLogIn(true);
+  };
+  const handleLogout = () => {
+    SetIsLogIn(false);
+  };
+
+  //*TOKEN
+  React.useEffect(() => {
+    handleTokenCheck();
+  }, []);
+  const handleTokenCheck = () => {
+    if (localStorage.getItem("jwt")) {
+      const jwt = localStorage.getItem("jwt");
+      checkToken(jwt).then((res) => {
+        if (res) {
+          SetUserEmail(res.data.email);
+          SetIsLogIn(true);
+          navigate("/", { replace: true });
+        }
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
+  };
   return (
-    <BrowserRouter>
-      <CurrentUserContext.Provider value={currentUser}>
-        <div className="App">
-          <div className="page">
-            <Header />
-            <Routes>
-              <Route
-                path="/mesto-react"
-                element={
-                  <Main
-                    cards={cards}
-                    onEditAvatar={() => {
-                      handleEditAvatarClick();
-                    }}
-                    onEditProfile={() => {
-                      handleEditProfileClick();
-                    }}
-                    onAddPlace={() => {
-                      handleAddPlaceClick();
-                    }}
-                    onCardClick={(card) => {
-                      handleCardClick(card);
-                    }}
-                    onCardLike={(card) => {
-                      handleCardLike(card);
-                    }}
-                    onCardDelete={(card) => {
-                      handleCardDelete(card);
-                    }}
-                  />
-                }
-              />
-              <Route path="/sign-up" element={<SignUp />} />
-              <Route path="/sign-in" element={<SignIn />} />
-            </Routes>
-            <Footer />
-            //*POPUPS //& edit profile
-            <EditProfilePopup
-              isOpen={isEditProfilePopupOpen}
-              onClose={closeAllPopup}
-              onUpdateUser={handleUpdateUser}
-            ></EditProfilePopup>
-            //& new place
-            <AddPlacePopup
-              isOpen={isAddPlacePopupOpen}
-              onClose={closeAllPopup}
-              onAddPlace={handleNewPlace}
-            ></AddPlacePopup>
-            //& are you sure?
-            <PopupWithForm
-              popupName="popup_delete-card-question"
-              containerName="popup__container_delete-card"
-              titleClassName="popup__title_delete-card-question"
-              title="Вы уверены?"
-              buttonClassName="popup__button-say-yes"
-              buttonText="Да"
-            ></PopupWithForm>
-            //& new avatar
-            <EditAvatarPopup
-              isOpen={isEditAvatarPopupOpen}
-              onClose={closeAllPopup}
-              onUpdateAvatar={handleUpdateAvatar}
-            ></EditAvatarPopup>
-            <ImagePopup card={selectedCard} onClose={closeAllPopup} />
-            <InfoTooltip
-              isOpen={isInfoTooltipOpen}
-              onClose={closeAllPopup}
-            ></InfoTooltip>
-          </div>
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className="App">
+        <div className="page">
+          <Header
+            isLogIn={isLogIn}
+            handleLogout={handleLogout}
+            userEmail={userEmail}
+          />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                isLogIn ? (
+                  <Navigate to="/mesto-react" replace />
+                ) : (
+                  <Navigate to="/sign-in" replace />
+                )
+              }
+            ></Route>
+
+            <Route
+              path="/mesto-react"
+              element={
+                <ProtectedRoute
+                  element={Main}
+                  cards={cards}
+                  onEditAvatar={() => {
+                    handleEditAvatarClick();
+                  }}
+                  onEditProfile={() => {
+                    handleEditProfileClick();
+                  }}
+                  onAddPlace={() => {
+                    handleAddPlaceClick();
+                  }}
+                  onCardClick={(card) => {
+                    handleCardClick(card);
+                  }}
+                  onCardLike={(card) => {
+                    handleCardLike(card);
+                  }}
+                  onCardDelete={(card) => {
+                    handleCardDelete(card);
+                  }}
+                  isLogIn={isLogIn}
+                />
+              }
+            />
+            <Route path="/sign-up" element={<Register handleInfoTooltipClick={handleInfoTooltipClick}/>} />
+            <Route
+              path="/sign-in"
+              element={<Login handleLogin={handleLogin} />}
+            />
+          </Routes>
+          <Footer />
+          //*POPUPS //& edit profile
+          <EditProfilePopup
+            isOpen={isEditProfilePopupOpen}
+            onClose={closeAllPopup}
+            onUpdateUser={handleUpdateUser}
+          ></EditProfilePopup>
+          //& new place
+          <AddPlacePopup
+            isOpen={isAddPlacePopupOpen}
+            onClose={closeAllPopup}
+            onAddPlace={handleNewPlace}
+          ></AddPlacePopup>
+          //& are you sure?
+          <PopupWithForm
+            popupName="popup_delete-card-question"
+            containerName="popup__container_delete-card"
+            titleClassName="popup__title_delete-card-question"
+            title="Вы уверены?"
+            buttonClassName="popup__button-say-yes"
+            buttonText="Да"
+          ></PopupWithForm>
+          //& new avatar
+          <EditAvatarPopup
+            isOpen={isEditAvatarPopupOpen}
+            onClose={closeAllPopup}
+            onUpdateAvatar={handleUpdateAvatar}
+          ></EditAvatarPopup>
+          <ImagePopup card={selectedCard} onClose={closeAllPopup} />
+          <InfoTooltip
+            isOpen={isInfoTooltipOpen}
+            onClose={closeAllPopup}
+            isSuccessReg={isSuccessReg}
+          ></InfoTooltip>
         </div>
-      </CurrentUserContext.Provider>
-    </BrowserRouter>
+      </div>
+    </CurrentUserContext.Provider>
   );
 }
 

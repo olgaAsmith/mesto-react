@@ -11,6 +11,9 @@
 @import url(blocks/header/header.css);
 @import url(blocks/header/__logo/header__logo.css);
 @import url(blocks/header/__sign-in/header__sign-in.css);
+@import url(blocks/header/__menu/header__menu.css);
+@import url(blocks/header/__menu-email/header__menu-email.css);
+@import url(blocks/header/__menu-exit/header__menu-exit.css);
 @import url(blocks/account/account.css);
 @import url(blocks/account/__avatar-place/account__avatar-place.css);
 @import url(blocks/account/__image/account__image.css);
