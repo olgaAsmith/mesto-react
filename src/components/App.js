@@ -33,7 +33,7 @@ function App() {
   const [userEmail, SetUserEmail] = React.useState("");
   //*navigate
   const navigate = useNavigate();
-
+  //*reg
   const [isSuccessReg, SetIsSuccessReg] = React.useState(false);
 
   //*get user data
@@ -155,6 +155,7 @@ function App() {
   //*LOGGED ingo
   const handleLogin = () => {
     SetIsLogIn(true);
+    handleTokenCheck();
   };
   const handleLogout = () => {
     SetIsLogIn(false);
@@ -167,15 +168,17 @@ function App() {
   const handleTokenCheck = () => {
     if (localStorage.getItem("jwt")) {
       const jwt = localStorage.getItem("jwt");
-      checkToken(jwt).then((res) => {
-        if (res) {
-          SetUserEmail(res.data.email);
-          SetIsLogIn(true);
-          navigate("/", { replace: true });
-        }
-      }).catch((error) => {
-        console.log(error);
-      });
+      checkToken(jwt)
+        .then((res) => {
+          if (res) {
+            SetUserEmail(res.data.email);
+            SetIsLogIn(true);
+            navigate("/", { replace: true });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
   return (
@@ -227,7 +230,12 @@ function App() {
                 />
               }
             />
-            <Route path="/sign-up" element={<Register handleInfoTooltipClick={handleInfoTooltipClick}/>} />
+            <Route
+              path="/sign-up"
+              element={
+                <Register handleInfoTooltipClick={handleInfoTooltipClick} />
+              }
+            />
             <Route
               path="/sign-in"
               element={<Login handleLogin={handleLogin} />}
